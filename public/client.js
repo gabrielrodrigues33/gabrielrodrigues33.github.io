@@ -1,20 +1,15 @@
 import * as THREE from 'three'
-import { ConvexGeometry } from './jsm/geometries/ConvexGeometry.js'
 import { DragControls } from './jsm/controls/DragControls.js'
-import Stats from './jsm/libs/stats.module.js'
-import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
-const scene = new THREE.Scene()
+const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-camera.position.z = 2.5
-camera.position.x = 2
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 2.5;
+camera.position.x = 2;
 
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
-
-//const controls = new OrbitControls(camera, renderer.domElement)
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 const geometry_gab = new THREE.BufferGeometry();
 const vertices_gab = new Float32Array( [
@@ -195,24 +190,6 @@ var new_A7 = new THREE.Vector3().add(A7);
 var new_B7 = new THREE.Vector3().add(B7);
 var new_C7 = new THREE.Vector3().add(C7);
 
-
-
-const geometry = new THREE.BoxGeometry(1,1,0)
-const material01 = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: false,
-})
-const material02 = new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
-    wireframe: false,
-})
-
-const cube1 = new THREE.Mesh(geometry, material01)
-const cube2 = new THREE.Mesh(geometry, material02)
-cube2.position.set(1,1,0);
-// scene.add(cube1)
-// scene.add(cube2)
-
 var objects = [];
 objects.push(piece1);
 objects.push(piece2);
@@ -225,6 +202,9 @@ objects.push(piece7);
 const controls = new DragControls( objects, camera, renderer.domElement );
 const pointer = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
+
+window.addEventListener('mousemove', PointInPolygon);
+window.addEventListener('mouseup', newCoordinates);
 
 var selected_object = '';
 
@@ -249,14 +229,6 @@ function PointInPolygon(event) {
 
     
 }
-
-window.addEventListener('mousemove', PointInPolygon);
-window.addEventListener('mousedown', onMouseDown);
-window.addEventListener('mouseup', newCoordinates);
-
-
-var pos = new THREE.Vector3();
-var matrix = new THREE.Matrix3();
 
 var rotations = [0,0,0,0,0,0,0,0];
 
@@ -922,36 +894,11 @@ function newCoordinates(event) {
             break;
     }
     var polygons = [polygon1,polygon2,polygon3,polygon4,polygon5,polygon6,polygon7];
-    console.log(PartialArea(polygons));
+
     if (PartialArea(polygons) > 0.9*GabaritoArea()) {
-        console.log("Você ganhou!");
+        var element = document.getElementById('final');
+        element.innerHTML = '<b>Você completou o Tangram! Parabéns!</b>'
     }
-}
-
-function onMouseDown(event) {
-
-    const mouse = new THREE.Vector3(
-        // (event.clientX / window.innerWidth)*2 - 1,
-        // -(event.clientY / window.innerHeight)*2 + 1);
-        event.clientX,
-        event.clientY);
-    
-    // console.log(mouse);
-
-    // var pos1 = new THREE.Vector3();
-    // piece1.getWorldPosition(pos1);
-    // console.log(pos1);
-
-    // console.log(selected_object);
-    // console.log(selected_object.object);
-    // if(selected_object.object == piece1){
-    //     console.log("É a peça 1");
-    // }
-
-
-    // console.log(L.dot(p2));
-    
-  
 }
 
 function onMouseWheel(event) {
