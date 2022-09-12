@@ -222,12 +222,10 @@ function PointInPolygon(event) {
     if(intersects.length > 0 && intersects[intersects.length-1].object != gabarito) {
         selected_object = intersects[intersects.length-1];
         intersects[intersects.length-1].object.material.opacity = 0.9;
-        window.addEventListener('wheel', onMouseWheel);
+        window.addEventListener('wheel', RotationObject);
     } else {
-        window.removeEventListener('wheel', onMouseWheel);      
+        window.removeEventListener('wheel', RotationObject);      
     }
-
-    
 }
 
 var rotations = [0,0,0,0,0,0,0,0];
@@ -829,7 +827,7 @@ function GabaritoArea () {
     return area_total;
 }
 
-function PartialArea (polygons) {
+function PolygonIntersectionArea (polygons) {
     var soma = 0;
     for (var i=0; i<polygons.length; i++) {
         soma += AreaPolygon(ClippedPolygonRetangulo(polygons[i])) + AreaPolygon(ClippedPolygonLosango(polygons[i]))
@@ -895,13 +893,13 @@ function newCoordinates(event) {
     }
     var polygons = [polygon1,polygon2,polygon3,polygon4,polygon5,polygon6,polygon7];
 
-    if (PartialArea(polygons) > 0.9*GabaritoArea()) {
+    if (PolygonIntersectionArea(polygons) > 0.9*GabaritoArea()) {
         var element = document.getElementById('final');
         element.innerHTML = '<b>Você completou o Tangram! Parabéns!</b>'
     }
 }
 
-function onMouseWheel(event) {
+function RotationObject(event) {
     switch (selected_object.object) {
         case piece1:
             selected_object.object.geometry.translate(-0.5/3, -1.5/3, 0);
